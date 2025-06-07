@@ -2,7 +2,7 @@
 # coding: utf-8
 
 """
-Created on Friday May 27 2025
+Created on Monday June 2 2025
 
 @author: Pratik
 
@@ -16,6 +16,9 @@ Command-Line Arguments:
 -----------------------
 --train      : bool (default=False)   
     Specify "True" to train the model.
+
+--full_data      : bool (default=False)   
+    Specify "True" to train the model with full data.
 
 --epochs      : int (default=20)   
     Number of training epochs to run.
@@ -54,6 +57,7 @@ np.random.seed(0)
 def main():
     parser = argparse.ArgumentParser(description='Train ConvLSTM on SST data')
     parser.add_argument('--train', action='store_true', help='Train the model (default: False if not specified)')
+    parser.add_argument('--full_data', action='store_true', help='Train the model with full data (default: False if not specified)')
     parser.add_argument('--epochs', type=int, default=200, help='Number of training epochs')
     parser.add_argument('--lr', type=float, default=0.0025, help='Learning rate')
     parser.add_argument('--batch_size', type=int, default=20, help='Batch size')
@@ -92,6 +96,7 @@ def main():
     T_in = 3
     T = 6
     train = args.train
+    full_data = args.full_data
     ### location vectors 
     print(train)
 
@@ -99,9 +104,15 @@ def main():
     # load data
     ################################################################
     print('loading dataset ...')
-    data = np.load("datasets/precip-data-sample.npy")
-    
-    data_train, data_test = train_test_split(data, train_size=50, random_state=42)
+    if full_data:
+
+        data = np.load("datasets/precipitation_simulated_data.npy")
+        
+        data_train, data_test = train_test_split(data, train_size=3900, random_state=42)
+    else:
+        data = np.load("datasets/precip-data-sample.npy")
+        
+        data_train, data_test = train_test_split(data, train_size=50, random_state=42)
     # ntrain = data_train.shape[0]
     ntest = data_test.shape[0]
     # train_a = torch.tensor(data_train[:,:,:,:T_in],dtype=torch.float)
