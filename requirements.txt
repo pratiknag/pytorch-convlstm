@@ -1,0 +1,11 @@
+numpy<2.0
+seaborn
+h5py
+scipy
+tqdm
+argparse
+torch
+torchvision
+scikit-learn
+pandas
+
