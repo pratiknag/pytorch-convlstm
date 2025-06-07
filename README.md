@@ -75,7 +75,7 @@ Below are example plots of the true and predicted outputs at a specific time ste
 ## 📝 Citation / Reference
 
 **Spatio-temporal DeepKriging (STDK)** model is used to generate the simulated datasets .
-A small simulated dataset is included for demonstration. For scientific use, please cite the corresponding paper [*(Space-Time.DeepKriging)*.](https://www.sciencedirect.com/science/article/abs/pii/S2211675323000489)
+A small simulated dataset is included for demonstration. For citation check [*(Space-Time.DeepKriging)*.](https://www.sciencedirect.com/science/article/abs/pii/S2211675323000489)
 
 ---
 
