@@ -50,8 +50,8 @@ def plot_heatmap(data, title, filename, vmin=None, vmax=None):
     ax = sns.heatmap(data, cmap="viridis", cbar_kws={
         "orientation": "vertical", "shrink": 0.6, "aspect": 10})
     ax.set_title(title, fontsize=10)
-    ax.set_xlabel("Longitude (deg)", fontsize=13)
-    ax.set_ylabel("Latitude (deg)", fontsize=13)
+    ax.set_xlabel("Longitude (deg)", fontsize=11)
+    ax.set_ylabel("Latitude (deg)", fontsize=11)
     ax.set_xticks([])
     ax.set_yticks([])
     plt.tight_layout()
