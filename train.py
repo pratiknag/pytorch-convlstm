@@ -140,7 +140,7 @@ def main():
             sys.exit(1)
 
         data = np.load(data_path)
-        data_train, data_test = train_test_split(data, train_size=3900, random_state=42)
+        data_train, data_test = train_test_split(data, train_size=0.9, random_state=42)
     else:
         data = np.load("datasets/precip-data-sample.npy")
         
