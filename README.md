@@ -1,5 +1,4 @@
 
-````markdown
 # 🔁 pytorch-convlstm  
 A PyTorch-based implementation of **ConvLSTM** for image forecasting tasks.
 
@@ -67,7 +66,7 @@ python plot.py --t=1
 
 Below are example plots of the true and predicted outputs at a specific time step (`t=1`):
 
-| True Output (`plots/1-true.png`) | Predicted Output (`plots/1-pred.png`) |
+|          True Output             |            Predicted Output           |
 | :------------------------------: | :-----------------------------------: |
 | ![True Output](plots/1-true.png) | ![Predicted Output](plots/1-pred.png) |
 
