@@ -105,9 +105,14 @@ def main():
     ################################################################
     print('loading dataset ...')
     if full_data:
+        data_path = "datasets/precipitation_simulated_data.npy"
+            
+        if not os.path.exists(data_path):
+            print(f"❌ Error: File not found at '{data_path}'.")
+            print("To access the full dataset contact pratiknag9@gmail.com ")
+            sys.exit(1)
 
-        data = np.load("datasets/precipitation_simulated_data.npy")
-        
+        data = np.load(data_path)
         data_train, data_test = train_test_split(data, train_size=3900, random_state=42)
     else:
         data = np.load("datasets/precip-data-sample.npy")
