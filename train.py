@@ -18,7 +18,24 @@ Command-Line Arguments:
     Specify "True" to train the model.
 
 --full_data      : bool (default=False)   
-    Specify "True" to train the model with full data.
+    To train the model on the full dataset, set the --full_data argument to "True". 
+    Make sure the dataset file is placed inside the datasets/ directory.
+    If you are using your own dataset, please ensure it follows the expected format:
+    Shape: (n_samples, x_dim, y_dim, t_dim)
+    where t_dim includes both input and output channels.
+
+    The number of input channels is specified via the command-line argument --T_in.
+
+    The total number of channels is specified via --T.
+
+    The output channel must always be the last channel in the t_dim dimension.
+
+    Example:
+    For a dataset with shape (n_samples, 64, 64, 6) and --T_in=3,
+    the model will use the first 3 channels as input and the last one (i.e., channel 6) as output.
+
+    Place your dataset in the datasets/ folder and pass its name using the 
+    --data argument (e.g., --data your_dataset_name).
 
 --epochs      : int (default=20)   
     Number of training epochs to run.
@@ -35,8 +52,14 @@ Command-Line Arguments:
 --gamma       : float (default=0.5)   
     Multiplicative factor for learning rate decay in the scheduler.
 
---data        : str (default="sst")   
-    Dataset name. Valid options are "sst" or "precip".
+--data        : str (default="")   
+    Dataset name.
+
+--T_in        : int (default=3)   
+    Number of input channels.
+
+--T           : int (default=6)   
+    Total Number of Channels.
 """
 
 import numpy as np
@@ -63,6 +86,9 @@ def main():
     parser.add_argument('--batch_size', type=int, default=20, help='Batch size')
     parser.add_argument('--step_size', type=int, default=3, help='Step size')
     parser.add_argument('--gamma', type=float, default=0.5, help='Gamma value.')
+    parser.add_argument('--T_in', type=int, default=3, help='Number of input channels')
+    parser.add_argument('--T', type=int, default=6, help='Total Number of channels')
+    parser.add_argument('--data', type=str, default="precipitation_simulated_data.npy", help='Dataset name')
 
     args = parser.parse_args()
     print("Creating necessary folders ......... ")
@@ -93,10 +119,11 @@ def main():
 
     # print(epochs, learning_rate, step_size, gamma)
 
-    T_in = 3
-    T = 6
+    T_in = args.T_in
+    T = args.T
     train = args.train
     full_data = args.full_data
+    data_name = args.data
     ### location vectors 
     print(train)
 
@@ -105,7 +132,7 @@ def main():
     ################################################################
     print('loading dataset ...')
     if full_data:
-        data_path = "datasets/precipitation_simulated_data.npy"
+        data_path = "datasets/"+data_name
             
         if not os.path.exists(data_path):
             print(f"❌ Error: File not found at '{data_path}'.")
@@ -122,8 +149,8 @@ def main():
     ntest = data_test.shape[0]
     # train_a = torch.tensor(data_train[:,:,:,:T_in],dtype=torch.float)
     # train_a = train_a.repeat([1,1,1,T_in,1])
-    train_u = torch.tensor(data_train[:,:,:,5],dtype=torch.float)
-    test_u = torch.tensor(data_test[:,:,:,5],dtype=torch.float)
+    train_u = torch.tensor(data_train[:,:,:,T-1],dtype=torch.float)
+    test_u = torch.tensor(data_test[:,:,:,T-1],dtype=torch.float)
 
     x_train = torch.tensor(data_train[:,:,:,:T_in],dtype=torch.float).permute(0,3,1,2)
     x_test = torch.tensor(data_test[:,:,:,:T_in],dtype=torch.float).permute(0,3,1,2)
@@ -219,6 +246,7 @@ def main():
         np.save("pred/ConvLSTM-pred.npy",pred)
         np.save("pred/ConvLSTM-test.npy", test_u)
     else:
+        print("Skipped training ... Loading model weights from previously saved model ... ")
         model_path = 'models/convlstm_model.pth'
         print("Generating predictions ...")
         if not os.path.exists(model_path):
